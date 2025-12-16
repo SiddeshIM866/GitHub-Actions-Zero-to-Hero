@@ -41,6 +41,9 @@ jobs:
         git config --global user.email "github-actions@github.com"
 
         git pull origin main --rebase
+
+        # Step 2: Make the change
+        echo "Last tested with Python ${{ matrix.python-version }}" >> test-log.txt
         
         git add test-log.txt
         git commit -m "Updated test log from GitHub Actions" || echo "No changes to commit"
