@@ -11,9 +11,13 @@ jobs:
         python-version: [3.8, 3.9]
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -26,3 +30,15 @@ jobs:
       run: |
         cd src
         python -m pytest addition.py
+
+    - name: Make a small change
+      run: |
+        echo "Last tested with Python ${{ matrix.python-version }}" >> test-log.txt
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add test-log.txt
+        git commit -m "Updated test log from GitHub Actions"
+        git push
